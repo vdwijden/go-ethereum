@@ -320,6 +320,10 @@ func (st *StateTransition) TransitionDb() (*ExecutionResult, error) {
 	// Set up the initial access list.
 	if rules.IsBerlin {
 		st.state.PrepareAccessList(msg.From(), msg.To(), vm.ActivePrecompiles(rules), msg.AccessList())
+		// EIP-3651 warm COINBASE
+		if rules.IsShanghai {
+			st.state.AddAddressToAccessList(st.evm.Context.Coinbase)
+		}
 	}
 	var (
 		ret   []byte
