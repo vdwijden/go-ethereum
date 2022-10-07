@@ -26,6 +26,7 @@ import (
 
 var activators = map[int]func(*JumpTable){
 	3855: enable3855,
+	3860: enable3860,
 	3529: enable3529,
 	3198: enable3198,
 	2929: enable2929,
@@ -201,4 +202,14 @@ func enable3540(jt *JumpTable) {
 
 func enable3670(jt *JumpTable) {
 	// Do nothing.
+}
+
+func enable3860(jt *JumpTable) {
+	createOp := *jt[CREATE]
+	createOp.dynamicGas = gasCreateEip3860
+	jt[CREATE] = &createOp
+
+	create2Op := *jt[CREATE2]
+	create2Op.dynamicGas = gasCreate2Eip3860
+	jt[CREATE2] = &create2Op
 }
